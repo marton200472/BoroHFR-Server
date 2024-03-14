@@ -1,0 +1,25 @@
+﻿.task {
+    padding: 5px 5px;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+.task .actions button, .task .actions a {
+    margin: 5px;
+}
+
+.task-past {
+    background-color: red;
+}
+
+.task-today {
+    background-color: darkcyan;
+}
+
+.task-thisweek {
+    background-color: darkolivegreen;
+}
+
+.task-distant {
+    background-color: darkgreen;
+}

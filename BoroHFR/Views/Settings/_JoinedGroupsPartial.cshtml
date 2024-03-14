@@ -1,0 +1,20 @@
+@model BoroHFR.ViewModels.Settings.GroupSettingsViewModel
+@if (!Model.GroupMemberships.Any())
+{
+    <p class="text-center text-danger">Egy csoportnak sem vagy tagja.</p>
+}
+@foreach (var group in Model.GroupMemberships)
+{
+    <div class="row">
+        <div class="col d-flex align-items-center">
+            <p class="m-0 text-truncate">
+                @group.Subject.Name - @group.Name (@group.Teacher)
+            </p>
+
+
+        </div>
+        <div class="col-2">
+            <button class="btn btn-outline-danger" onclick="leaveGroup('@group.Id')">Kilépés</button>
+        </div>
+    </div>
+}

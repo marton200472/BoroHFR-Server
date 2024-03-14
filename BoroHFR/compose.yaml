@@ -1,0 +1,46 @@
+services:
+  server:
+    build:
+      context: .
+      target: final
+    ports:
+      - 5005:8080
+    depends_on:
+        db:
+          condition: service_healthy
+    restart: always
+    networks:
+      - borohfr
+    volumes:
+      - storage:/app/storage
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+  db:
+    image: yobasystems/alpine-mariadb
+    container_name: mariadb-server
+    restart: always
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=borohfr
+      - MYSQL_RANDOM_ROOT_PASSWORD=True
+      - MYSQL_USER=borohfr
+      - MYSQL_PASSWORD=borohfr
+    expose:
+      - "3306"
+    networks:
+      - borohfr
+    healthcheck:
+      test: ['CMD-SHELL', '/usr/bin/mysqladmin ping -u borohfr --silent']
+      interval: 3s
+      retries: 10
+      start_period: 10s
+volumes:
+  db-data:
+    driver: local
+  storage:
+    driver: local  
+networks:
+  borohfr:
+    driver: bridge
+

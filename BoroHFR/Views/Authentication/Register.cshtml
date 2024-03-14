@@ -1,0 +1,84 @@
+﻿@model BoroHFR.ViewModels.Authentication.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Regisztráció";
+}
+
+@using (Html.BeginForm(FormMethod.Post, new
+{
+    @class = "px-5 coolform"
+}))
+{
+    <h1>Regisztráció</h1>
+    <div class="form-group py-1">
+    <label>Meghívó kód:</label>
+    @Html.TextBoxFor(x => x.Token, null, new {@class="form-control bg-dark text-light", @required=""})
+    @Html.ValidationMessageFor(x => x.Token, "", new
+    {
+    @class = "text-danger"
+    })
+    @if (Model is not null && Model.BadToken)
+        {
+            <span class="text-danger">Érvénytelen meghívó kód.</span>
+        }
+    </div>
+    <div class="form-group py-1">
+    <label>Felhasználónév:</label>
+    @Html.TextBoxFor(x => x.Username, null, new {@class="form-control bg-dark text-light", @required=""})
+    @Html.ValidationMessageFor(x => x.Username, "", new
+    {
+    @class = "text-danger"
+    })
+    @if (Model is not null && Model.UsernameTaken)
+        {
+            <span class="text-danger">A megadott felhasználónév foglalt.</span>
+        }
+    </div>
+    <div class="form-group py-1">
+    <label>Jelszó:</label>
+    @Html.PasswordFor(x => x.Password, new {@class="form-control bg-dark text-light", @required=""})
+    @Html.ValidationMessageFor(x => x.Password, "", new
+    {
+    @class = "text-danger"
+    })
+</div>
+    <div class="form-group py-1">
+    <label>Jelszó megerősítése:</label>
+    @Html.PasswordFor(x => x.PasswordAgain, new {@class="form-control bg-dark text-light", @required=""})
+    @Html.ValidationMessageFor(x => x.PasswordAgain, "", new
+    {
+    @class = "text-danger"
+    })
+</div>
+    <div class="form-group py-1">
+    <label>E-mail:</label>
+    @Html.TextBoxFor(x => x.EMail, null, new {@class="form-control bg-dark text-light", @required=""})
+    @Html.ValidationMessageFor(x => x.EMail, "", new
+    {
+    @class = "text-danger"
+    })
+    @if (Model is not null && Model.EMailTaken)
+        {
+            <span class="text-danger">A megadott e-mail címmel már regisztráltak.</span>
+        }
+    </div>
+
+    <div class="form-check py-1">
+    @Html.CheckBoxFor(m=>m.AcceptPrivacyPolicy,new {@id="privpolbox",@class="form-check-input",@required=""})
+    <label for="privpolbox" class="form-check-label">Elfogadom az <a href="#" role="button" data-bs-toggle="modal"
+            data-bs-target="#privacypolicymodal">adatvédelmi irányelvek</a>et.</label>
+    <br />
+    @if (Model is not null && Model.DidNotAcceptPrivacyPolicy)
+        {
+            <span class="text-danger">Az adatvédelmi irányelvek elfogadása kötelező.</span>
+        }
+    </div>
+    <button class="btn btn-primary" type="submit">Regisztráció</button>
+
+    <p class="text-center mb-0 mt-1">Van már fiókod? <a asp-action="Login" class="fw-bold">Jelentkezz be!</a></p>
+}
+
+@section Modals
+    {
+    <partial name="_PrivacyPolicyModal" />
+}

@@ -1,0 +1,94 @@
+﻿@using BoroHFR.ViewModels.Home
+@model EventInfoPartialViewModel
+
+@{
+    bool isEv = Model.Event.Type == EventType.Event;
+}
+
+<div class="modal-header">
+    <h4 class="modal-title">@Model.Event.Title</h4>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+</div>
+<div class="modal-body">
+    @if(isEv)
+    {
+        <div>
+            Esemény időtartama: @Model.Event.Date.ToString("yyyy-MM-dd")  @Model.Event.StartTime.ToString("HH:mm") - @Model.Event.EndTime!.Value.ToString("HH:mm")
+        </div>
+    }
+    else
+    {
+        <div>
+            Határidő: @Model.Event.Date.ToString("yyyy-MM-dd")  @Model.Event.StartTime.ToString("HH:mm")
+        </div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.Event.Description))
+    {
+        <div class="my-4 w-100" style="height: 1px; background-color: gray;"></div>
+        <div>
+            <h5>Leírás</h5>
+            <p>@Model.Event.Description</p>
+        </div>
+    }
+    
+
+    @if (Model.Event.AttachedFiles.Any())
+    {
+        <div class="my-4 w-100" style="height: 1px; background-color: gray;"></div>
+        <div>
+            <h5>Csatolt fájlok</h5>
+            <ul>
+                @foreach (var f in Model.Event.AttachedFiles)
+                {
+                    <li><a class="text-white" href="@Url.Action("GetFile","File",new {id=f.Id})">@f.DownloadName</a></li>
+                }
+            </ul>
+            
+        </div>
+    }
+
+    <div class="my-4 w-100" style="height: 1px; background-color: gray;"></div>
+
+    <div>
+        <p>
+            Feltöltve: @Model.Event.CreateTime.ToString("yyyy-MM-dd HH:mm") <a class="text-white" href="@Url.Action("UserInfo",new { id = Model.Event.Creator.Id })">@Model.Event.Creator.Username</a>
+            @if (Model.Event.Modifier is not null && Model.Event.ModifyTime is not null)
+            {
+                <span>Módosítva: @Model.Event.ModifyTime.Value.ToString("yyyy-MM-dd HH:mm") <a class="text-white" href="@Url.Action("UserInfo",new { id = Model.Event.Creator.Id })">@Model.Event.Modifier.Username</a></span>
+            }
+        </p>
+    </div>
+    
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" onclick="chat.OpenChannel('@Model.Event.ConversationId')">Csevegés</button>
+    @if (Model.CanModify)
+    {
+        <a class="btn btn-primary" href="@Url.Action("EditEvent", new { evid = Model.Event.Id.value })">Szerkesztés</a>
+    }
+    @if (Model.IsAssociated)
+    {
+        if (isEv)
+        {
+            <button onclick="RemoveAssociated('@Model.Event.Id')" class="btn btn-outline-success">Mégsem megyek</button>
+        }
+        else
+        {
+            <button onclick="RemoveAssociated('@Model.Event.Id')" class="btn btn-outline-success">Nincs kész</button>
+        }
+
+    }
+    else
+    {
+        if (isEv)
+        {
+            <button onclick="MarkAssociated('@Model.Event.Id')" class="btn btn-success">Ott leszek</button>
+        }
+        else
+        {
+            <button onclick="MarkAssociated('@Model.Event.Id')" class="btn btn-success">Kész</button>
+        }
+    }
+    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Bezár</button>
+</div>

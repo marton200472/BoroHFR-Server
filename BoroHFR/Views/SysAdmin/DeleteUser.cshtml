@@ -1,0 +1,9 @@
+﻿@model BoroHFR.Models.User
+
+<h1>Biztosan törlöd @Model.Username (@Model.Class.Name) felhasználót?</h1>
+<h2>A felhasználóhoz kapcsolódó minden adat (üzenetek, fájlok, események, stb.) törlésre kerül!</h2>
+
+<div class="d-flex flex-row justify-content-center">
+    <a class="mx-3 btn btn-danger" href="@Url.Action("ConfirmDeleteUser", new {cid = Model.Class.Id, uid = Model.Id})">Törlés</a>
+    <a class="mx-3 btn btn-secondary" href="@Url.Action("ClassInfo",new {id=Model.Class.Id})">Mégsem</a>
+</div>

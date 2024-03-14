@@ -1,0 +1,32 @@
+﻿@model BoroHFR.ViewModels.Setup.AuthDataViewModel
+
+<form method="post" class="coolform">
+    <h1>Rendszeradminisztrátor adatai:</h1>
+
+    <div class="form-group py-1">
+        <label>E-mail cím:</label>
+        @Html.TextBoxFor(x => x.Email, null, new { @class = "form-control bg-dark text-light", @required = "" })
+        @Html.ValidationMessageFor(x => x.Email, "", new
+            {
+                @class = "text-danger"
+            })
+    </div>
+    <div class="form-group py-1">
+        <label>Jelszó:</label>
+        @Html.PasswordFor(x => x.Password, new { @class = "form-control bg-dark text-light", @required = "" })
+        @Html.ValidationMessageFor(x => x.Password, "", new
+            {
+                @class = "text-danger"
+            })
+    </div>
+    <div class="form-group py-1">
+        <label>Jelszó megerősítése:</label>
+        @Html.PasswordFor(x => x.PasswordAgain, new { @class = "form-control bg-dark text-light", @required = "" })
+        @Html.ValidationMessageFor(x => x.PasswordAgain, "", new
+            {
+                @class = "text-danger"
+            })
+    </div>
+
+    <button class="btn btn-primary" type="submit">Mentés</button>
+</form>

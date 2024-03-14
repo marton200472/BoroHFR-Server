@@ -1,0 +1,92 @@
+@using BoroHFR.ViewModels.Home
+@model IndexViewModel
+
+@{
+    ViewData["Title"] = "Főoldal";
+}
+<div class="d-flex flex-row align-content-center justify-content-center">
+    <div class="m-3 row align-content-center">
+        <div class="color-square" style="background-color: #2dace3;"></div>
+        <div class="color-square" style="background-color: #166182;"></div>
+        Esemény (részt veszek: igen / nem)
+    </div>
+    <div class="m-3 row align-content-center">
+        <div class="color-square" style="background-color: #e3a62d;"></div>
+        <div class="color-square" style="background-color: #8a6213;"></div>
+        Feladat / elkészített feladat
+    </div>
+    <div class="m-3 row align-content-center">
+        <div class="color-square" style="background-color: #32a852;"></div>
+        Tanóra
+    </div>
+</div>
+<div id="calendar"></div>
+@section Scripts {
+    <script src="~/lib/fullcalendar/index.global.min.js"></script>
+    <script>
+        var refreshFunction;
+        document.addEventListener('DOMContentLoaded', function () {
+            var EventInfo = new bootstrap.Modal(document.getElementById('EventInfo'), {});
+            const calendarEl = document.getElementById('calendar');
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                locale: 'hu',
+                firstDay: 1,
+                allDaySlot: false,
+                initialView: 'timeGridWeek',
+                events: "@Url.Action("LoadCalendarData")",
+                contentHeight: "auto",
+                nowIndicator: true,
+                eventClick: function (info) {
+                    if (info.event.extendedProps.type == "event") {
+                        $("#EventInfoModalContent").load("eventinfo/" + info.event.id);
+                        EventInfo.show();
+                    }
+                    
+                },
+                customButtons: {
+                    createEvent: {
+                        text: 'Esemény létrehozása',
+                        click: function () {
+                            location.href = 'createevent/';
+                        }
+                    },
+                    createTask: {
+                        text: 'Feladat létrehozása',
+                        click: function () {
+                            location.href = 'createtask/';
+                        }
+                    },
+                },
+                headerToolbar: {
+                    left: 'prev,next today createEvent createTask',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                }
+            });
+            refreshFunction = ()=>calendar.refetchEvents();
+            calendar.render();
+            chat.OpenChannel('@Model.DefaultConversation', true);
+        });
+
+
+        async function MarkAssociated(eventId) {
+            await fetch("/event/"+eventId+"/setassociated");
+            $("#EventInfoModalContent").load("eventinfo/" + eventId);
+            refreshFunction();
+        }
+
+        async function RemoveAssociated(eventId) {
+            await fetch("/event/" + eventId + "/removeassociated");
+            $("#EventInfoModalContent").load("eventinfo/" + eventId);
+            refreshFunction();
+        }
+    </script>
+}
+
+@section Modals {
+    <div class="modal" id="EventInfo" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div id="EventInfoModalContent" class="modal-content bg-dark text-light"></div>
+        </div>
+    </div>
+}

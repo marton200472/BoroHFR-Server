@@ -1,0 +1,129 @@
+﻿@using BoroHFR.ViewModels.Admin
+@model IndexViewModel
+
+@{
+    string[] WeekDays = { "Vasárnaponként", "Hétfőnként", "Keddenként", "Szerdánként", "Csütörtökönként", "Péntekenként", "Szombatonként" };
+}
+
+<div class="container">
+    <h1>@Model.Class.Name</h1>
+    <div class="row">
+        <div class="col">
+            <h2>Tárgy-Csoport-Óra<a class="btn btn-primary float-end mx-2" href="@Url.Action("CreateLesson")">Óra hozzáadása</a><a class="btn btn-primary float-end mx-2" href="@Url.Action("CreateGroup")">Csoport hozzáadása</a><a class="btn btn-primary float-end mx-2" href="@Url.Action("CreateSubject")">Tárgy hozzáadása</a></h2>
+            <table class="table table-dark">
+                <thead>
+                    <tr>
+                        <td class="align-middle">Tárgy</td>
+                        <td class="align-middle">Csoport</td>
+                        <td class="align-middle">Oktató</td>
+                        <td class="align-middle">Óra</td>
+                        <td class="align-middle">Időpont</td>
+                        <td class="align-middle text-center">Műveletek</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var subject in Model.Subjects)
+                    {
+                        <tr>
+                            <td class="align-middle">@subject.Name</td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <a class="btn btn-primary float-end" href="@Url.Action("EditSubject", new { sid = subject.Id })">Szerkesztés</a>
+                            </td>
+                        </tr>
+                        @foreach (var group in Model.Groups.Where(x => x.Subject == subject))
+                        {
+                            <tr>
+                                <td class="align-middle"><i class="bi bi-arrow-return-right"></i></td>
+                                <td class="align-middle">@group.Name</td>
+                                <td class="align-middle">@group.Teacher</td>
+                                <td class="align-middle"></td>
+                                <td class="align-middle"></td>
+                                <td class="align-middle">
+                                    <a class="btn btn-primary float-end" href="@Url.Action("EditGroup", new { gid = group.Id })">Szerkesztés</a>
+                                </td>
+                            </tr>
+                            @foreach (var lesson in Model.Lessons.Where(x => x.GroupId == group.Id))
+                            {
+                                <tr>
+                                    <td class="align-middle"></td>
+                                    <td class="align-middle"></td>
+                                    <td class="align-middle"><i class="bi bi-arrow-return-right"></i></td>
+                                    <td class="align-middle">@lesson.Label</td>
+                                    <td class="align-middle">@($"{WeekDays[(int)lesson.FirstDate.DayOfWeek]}, {lesson.StartTime.ToString("HH:mm")}{(lesson.RepeatWeeks == 0 ? ", Nincs ismétlődés" : (lesson.RepeatWeeks == 1 ? "" : ", " + lesson.RepeatWeeks + " hetente"))}")</td>
+                                    <td class="align-middle">
+                                        <a class="btn btn-primary float-end" href="@Url.Action("EditLesson", new { lesid = lesson.Id })">Szerkesztés</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+                    <tr>
+                        <td class="align-middle">(Nincs tárgy)</td>
+                        <td class="align-middle"></td>
+                        <td class="align-middle"></td>
+                        <td class="align-middle"></td>
+                        <td class="align-middle"></td>
+                        <td class="align-middle"></td>
+                    </tr>
+                    @foreach (var group in Model.Default.Groups)
+                    {
+                        <tr>
+                            <td class="align-middle"><i class="bi bi-arrow-return-right"></i></td>
+                            <td class="align-middle">@group.Name</td>
+                            <td class="align-middle">@group.Teacher</td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                @if (group.Id != Model.Class.DefaultGroupId)
+                                {
+                                    <a class="btn btn-primary" href="@Url.Action("EditGroup", new { gid = group.Id })">Szerkesztés</a>                                    
+                                }
+                            </td>
+                        </tr>
+                        @foreach (var lesson in Model.Lessons.Where(x => x.GroupId == group.Id))
+                        {
+                            <tr>
+                                <td class="align-middle"></td>
+                                <td class="align-middle"></td>
+                                <td class="align-middle"><i class="bi bi-arrow-return-right"></i></td>
+                                <td class="align-middle">@lesson.Label</td>
+                                <td class="align-middle">@($"{WeekDays[(int)lesson.FirstDate.DayOfWeek]}, {lesson.StartTime.ToString("HH:mm")}{(lesson.RepeatWeeks == 0 ? ", Nincs ismétlődés" : (lesson.RepeatWeeks == 1 ? "" : ", " + lesson.RepeatWeeks + " hetente"))}")</td>
+                                <td class="align-middle">
+                                    <a class="btn btn-primary" href="@Url.Action("EditLesson", new { lesid = lesson.Id })">Szerkesztés</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h2>Tagok<a href="@Url.Action("InviteUsers")" class="btn btn-primary float-end">Meghívó készítése</a></h2>
+            <table class="table table-dark">
+                <thead>
+                    <tr>
+                        <td>Felhasználónév</td>
+                        <td>Szerepkör</td>
+                        <td>Regisztráció dátuma</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var member in Model.Members)
+                    {
+                        <tr>
+                            <td>@member.Username</td>
+                            <td>@member.Role.ToString()</td>
+                            <td>@member.RegisterTime.ToString("yyyy-MM-dd HH:mm UTC")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

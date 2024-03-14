@@ -1,0 +1,12 @@
+﻿@using BoroHFR.ViewModels.Admin
+@model EditSubjectViewModel
+
+<form method="post" class="container">
+    <div class="form-group py-1">
+        @Html.LabelFor(x => x.Name, "Név", new { @class = "form-label" })
+        @Html.TextBoxFor(x => x.Name, null, new { @class = "form-control bg-dark text-light" })
+        <p class="text-danger">@Html.ValidationMessageFor(x => x.Name)</p>
+    </div>
+    <button class="btn btn-primary" type="submit">Mentés</button>
+    <a class="btn btn-outline-danger" href="@Url.Action("Index")">Mégse</a>
+</form>

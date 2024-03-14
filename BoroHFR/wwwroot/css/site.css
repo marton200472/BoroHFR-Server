@@ -1,0 +1,33 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+.navbar .nav-link.active {
+  font-weight:bold;
+}
+
+html, body{
+  user-select: none;
+}
+
+.color-square {
+    width: 14pt;
+    height: 14pt;
+    border-radius: 7pt;
+    margin: auto 5px;
+}

@@ -1,0 +1,10 @@
+@model string
+
+@{
+    ViewData["Title"] = "E-mail cím megerősítés sikertelen";
+}
+
+<h1>E-mail cím megerősítése sikertelen</h1>
+<p>A megerősítő kód érvénytelen.</p>
+<p>A folytatáshoz kérlek, jelentkezz be!</p>
+<a class="btn btn-primary" href='@Url.Action("Login","Authentication")'>Bejelentkezés</a>

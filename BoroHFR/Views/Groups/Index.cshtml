@@ -1,0 +1,27 @@
+﻿@using BoroHFR.ViewModels.Groups
+@model IndexViewModel
+
+<div class="container">
+    <h1>Csoportok</h1>
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <td>Név</td>
+                <td>Oktató</td>
+                <td>Műveletek</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var group in Model.Groups)
+            {
+                <tr>
+                    <td>@group.Name</td>
+                    <td>@group.Teacher</td>
+                    <td>
+                        <button class="btn btn-primary" onclick="chat.OpenChannel('@group.DefaultConversationId')">Csevegés</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,12 @@
+﻿@model BoroHFR.ViewModels.SysAdmin.CreateAdminTokenViewModel
+
+@{
+    ViewData["Title"] = "Token visszaigazolás";
+}
+
+<h1>Token létrehozva</h1>
+
+<label for="admintoken">Token</label>
+<input id="admintoken" type="text" readonly value="@Model.Token" />
+
+<a class="btn btn-primary mx-auto" href="@Url.Action("ClassInfo", new { id=Model.ClassId })">Kész</a>

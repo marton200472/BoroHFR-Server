@@ -1,0 +1,69 @@
+﻿@model BoroHFR.ViewModels.Tasks.TasksViewModel
+<h1>Feladatok <a class="btn btn-primary" href="@Url.Action("CreateTask","Home")">Új feladat</a></h1>
+
+<div class="d-flex flex-row align-content-center justify-content-center">
+    <div class="m-3 row align-content-center">
+        <div class="color-square task-past"></div>
+        Lejárt határidő
+    </div>
+    <div class="m-3 row align-content-center">
+        <div class="color-square task-today"></div>
+        Mai határidő
+    </div>
+    <div class="m-3 row align-content-center">
+        <div class="color-square task-thisweek"></div>
+        7 napon belüli határidő
+    </div>
+    <div class="m-3 row align-content-center">
+        <div class="color-square task-distant"></div>
+        Későbbi feladat
+    </div>
+</div>
+
+@if(!Model.Tasks.Any())
+{
+    <h1 class="text-center">GG, minden kész!</h1>
+}
+
+@foreach(var day in Model.Tasks.GroupBy(x=>x.Date))
+{
+    <div class="daysection">
+        <h3>@day.Key.ToShortDateString()</h3>
+        @foreach(var t in day)
+        {
+            var today = DateOnly.FromDateTime(DateTime.Today);
+            <div class="task row @(t.Date < today ? "task-past" : (t.Date == today ? "task-today" : (t.Date < today.AddDays(7) ? "task-thisweek" : "task-distant")))">
+                <div class="col-8">
+                    <h4>@t.Title - @t.StartTime</h4>
+                    @if (t.Description is not null)
+                    {
+                        <p>@t.Description</p>
+                    }
+                    @if (t.AttachedFiles.Any())
+                    {
+                        <div>
+                            <h5>Csatolt fájlok</h5>
+                            <ul>
+                                @foreach (var f in t.AttachedFiles)
+                                {
+                                    <li><a class="text-white" href="@Url.Action("GetFile","File",new {id=f.Id})">@f.DownloadName</a></li>
+                                }
+                            </ul>
+
+                        </div>
+                    }
+                </div>
+                <div class="col-4 d-flex flex-row align-content-center justify-content-center flex-wrap actions">
+                    <button class="btn btn-primary" onclick="chat.OpenChannel('@t.ConversationId')">Csevegés</button>
+                    @if (Model.IsUserAdmin || t.CreatorId == Model.UserId)
+                    {
+                        <a class="btn btn-primary" href="@Url.Action("EditEvent","Home", new { evid = t.Id.value })">Szerkesztés</a>
+                    }
+
+                    <a href="@Url.Action("MarkDone", "Tasks", new{id=t.Id})" class="btn btn-success">Kész</a>
+                </div>
+                
+            </div>
+        }
+    </div>
+}

@@ -1,0 +1,47 @@
+﻿@using BoroHFR.ViewModels.Admin
+@model CreateLessonViewModel
+
+<form method="post" class="container">
+    <div class="form-group py-1">
+        @Html.LabelFor(x => x.Label, "Név", new { @class = "form-label" })
+        @Html.TextBoxFor(x => x.Label, null, new { @class = "form-control bg-dark text-light" })
+        <p class="text-danger">@Html.ValidationMessageFor(x => x.Label)</p>
+    </div>
+    <div class="form-group py-1">
+        @Html.LabelFor(x => x.FirstDate, "Első nap", new { @class = "form-label" })
+        <input class="form-control bg-dark text-light" type="date" id="@Html.IdFor(x => x.FirstDate)" name="@Html.NameFor(x => x.FirstDate)" value="@(Model.FirstDate.ToString("yyyy-MM-dd") ?? DateTimeOffset.Now.ToString("yyyy-MM-dd"))"></input>
+    </div>
+    <div class="form-group py-1">
+        @Html.LabelFor(x => x.LastDate, "Utolsó nap", new { @class = "form-label" })
+        <input class="form-control bg-dark text-light" type="date" id="@Html.IdFor(x => x.LastDate)" name="@Html.NameFor(x => x.LastDate)" value="@(Model.LastDate.ToString("yyyy-MM-dd") ?? DateTimeOffset.Now.ToString("yyyy-MM-dd"))"></input>
+    </div>
+    <div class="form-group py-1">
+        @Html.LabelFor(x => x.SelectedGroupGuid, "Csoport", new { @class = "form-label" })
+        <select class="form-control bg-dark text-light" id="@Html.IdFor(x => x.SelectedGroupGuid)" name="@Html.NameFor(x => x.SelectedGroupGuid)">
+            @foreach (var group in Model.Groups)
+            {
+                <option value="@group.Id.value">@group.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group py-1">
+        @Html.LabelFor(x => x.RepeatWeeks, "Ismétlődés", new { @class = "form-label" })
+        <select class="form-control bg-dark text-light" id="@Html.IdFor(x => x.RepeatWeeks)" name="@Html.NameFor(x => x.RepeatWeeks)">
+            <option value="0">Nincs</option>
+            <option selected value="1">1 hetente</option>
+            <option value="2">2 hetente</option>
+            <option value="3">3 hetente</option>
+            <option value="4">4 hetente</option>
+        </select>
+    </div>
+    <div class="form-group py-1">
+        @Html.LabelFor(x => x.StartTime, "Óra kezdete", new { @class = "form-label" })
+        <input class="form-control bg-dark text-light" type="time" id="@Html.IdFor(x => x.StartTime)" name="@Html.NameFor(x => x.StartTime)" value="@(Model.StartTime.ToString("HH:mm") ?? DateTimeOffset.Now.ToString("HH:mm"))"></input>
+    </div>
+    <div class="form-group py-1">
+        @Html.LabelFor(x => x.EndTime, "Óra vége", new { @class = "form-label" })
+        <input class="form-control bg-dark text-light" type="time" id="@Html.IdFor(x => x.EndTime)" name="@Html.NameFor(x => x.EndTime)" value="@(Model.EndTime.ToString("HH:mm") ?? DateTimeOffset.Now.ToString("HH:mm"))"></input>
+    </div>
+    <button class="btn btn-primary" type="submit">Létrehozás</button>
+    <a class="btn btn-outline-danger" href="@Url.Action("Index")">Mégse</a>
+</form>

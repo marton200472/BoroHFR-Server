@@ -1,0 +1,18 @@
+﻿@model ulong
+
+<h1 class="text-center">Eddig <span id="clickCount">@Model</span> alkalommal nyomtad meg a gombot.</h1>
+<div class="d-flex">
+    <button class="btn btn-primary mx-auto" onmouseup="buttonClick()">Nyomj meg!</button>
+</div>
+
+
+
+@section Scripts {
+    <script>
+        async function buttonClick() {
+            var res = await fetch("@Url.Action("Click", "ButtonGame")");
+            var cnt = await res.text();
+            document.getElementById('clickCount').innerHTML = cnt;
+        }
+    </script>
+}

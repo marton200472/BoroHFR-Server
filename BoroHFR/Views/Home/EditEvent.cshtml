@@ -1,0 +1,74 @@
+﻿@using BoroHFR.ViewModels.Home
+@model EditEventViewModel
+
+<form method="post" class="container">
+    @{
+        bool isEv = Model.Event.Type == EventType.Event;
+        ViewData["Title"] = $"{(isEv ? "Esemény" : "Feladat")} szerkesztés";
+    }
+    <h1>@(isEv ? "Esemény módosítása" : "Házi feladat módosítása")</h1>
+    <div class="form-group py-1">
+        @Html.LabelFor(x => x.Event.Title, "Cím", new { @class="form-label" })
+        @Html.TextBoxFor(x => x.Event.Title, null, new { @class = "form-control bg-dark text-light"})
+        <p class="text-danger">@Html.ValidationMessageFor(x => x.Event.Title)</p>
+    </div>
+    <div class="form-group py-1">
+        @Html.LabelFor(x => x.Event.Date, "Dátum", new { @class = "form-label" })
+        <input class="form-control bg-dark text-light" type="date" id="@Html.IdFor(x => x.Event.Date)" name="@Html.NameFor(x => x.Event.Date)" value="@Model.Event.Date.ToString("yyyy-MM-dd")"></input>
+        <p class="text-danger">@Html.ValidationMessageFor(x => x.Event.Date)</p>
+    </div>
+    <div class="form-group py-1">
+        @Html.LabelFor(x => x.Event.Duration, isEv ? "Kezdés" : "Határidő", new { @class = "form-label" })
+        <input class="form-control bg-dark text-light" type="time" id="@Html.IdFor(x => x.Event.StartTime)" name="@Html.NameFor(x => x.Event.StartTime)" value="@Model.Event.StartTime.ToString("HH:mm")"></input>
+    </div>
+    @if (isEv)
+    {
+        <div class="form-group py-1">
+            @Html.LabelFor(x => x.Event.EndTime, "Vége", new { @class = "form-label" })
+            <input class="form-control bg-dark text-light" type="time" id="@Html.IdFor(x => x.Event.EndTime)" name="@Html.NameFor(x => x.Event.EndTime)" value="@Model.Event.EndTime?.ToString("HH:mm")"></input>
+            <p class="text-danger">@Html.ValidationMessageFor(x => x.Event.EndTime)</p>
+        </div>
+    }
+    <div class="form-group py-1">
+        @Html.LabelFor(x => x.Event.Description, "Leírás", new { @class = "form-label" })
+        @Html.TextAreaFor(x => x.Event.Description, new { @class = "form-control bg-dark text-light" })
+        <p class="text-danger">@Html.ValidationMessageFor(x => x.Event.Description)</p>
+    </div>
+    
+    <div class="form-group py-1 border border-1 border-light my-3 p-3">
+        <label>Fájlok</label>
+        <table class="table table-dark" id="uploadProgressTable">
+            <tbody>
+                @foreach (var file in Model?.Event?.AttachedFiles ?? Enumerable.Empty<File>())
+                {
+                    <tr>
+                        <td>
+                            <div class="file-name">@file.DownloadName</div>
+                        </td>
+                        <td>
+                            <div class="progress-container">
+                                <div class="progress-bar" style="width: 100%;">100%</div>
+                            </div>
+                        </td>
+                        <td style="width: 50px;">
+                            <button type="button" class="btn-close btn-close-white" onclick="removeFile(this)"></button>
+                        </td>
+                        <input type="hidden" name="attachments" value="@file.Id">
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-primary" onclick="AddFiles()">Fájl hozzáadása</button>
+    </div>
+
+
+    <button class="btn btn-primary" type="submit">Mentés</button>
+    <a class="btn btn-outline-danger" href="@Url.Action("Index")">Mégse</a>
+    <a class="btn btn-outline-danger" href="@Url.Action("DeleteEvent", new { evid=Model.Event.Id })">Törlés</a>
+</form>
+
+<input id="fileInput" type="file" class="d-none" multiple>
+
+@section Scripts {
+    <script src="/js/file.js"></script>
+}

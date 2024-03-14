@@ -1,0 +1,59 @@
+@model BoroHFR.ViewModels.Settings.SubjectSearchResultViewModel
+@{
+    int row = 0;
+}
+
+@if (!Model.Subjects.Any())
+{
+    <p class="text-danger text-center">Nincs találat. Lehet, hogy már csatlakoztál?</p>
+}
+
+<style>
+    .acc-btn {
+        background-color: rgb(33, 37, 41) !important;
+        color: white !important;
+    }
+
+    .acc-btn.collapsed i {
+        transform: rotate(0deg);
+    }
+
+    .acc-btn i {
+        transform: rotate(180deg);
+    }
+</style>
+<div class="accordion accordion-flush" id="subjectsAccordion">
+
+
+    @foreach (var subject in Model.Subjects)
+    {
+        <div class="accordion-item  text-light bg-dark">
+            <h2 class="accordion-header" id='@("heading"+subject.Id)'>
+                <button class="acc-btn collapsed w-100 h-100 text-start" type="button" data-bs-toggle="collapse"
+                        data-bs-target='@("#collapse" + subject.Id)' aria-expanded="false"
+                        aria-controls='@("collapse"+subject.Id)'>
+                    <span>@subject.Name </span> <i class="bi bi-chevron-down float-end"></i>
+                </button>
+            </h2>
+            <div id='@("collapse"+subject.Id)' class="accordion-collapse collapse" aria-labelledby='@("heading"+subject.Id)'
+                data-bs-parent="#subjectsAccordion">
+                <div class="accordion-body">
+                    @foreach (var group in subject.Groups)
+                    {
+                        <div class="row d-flex">
+                            <div class="col my-auto">
+                                @group.Name (@group.Teacher)
+                            </div>
+                            <div class="col-4">
+                                <button class="btn btn-primary float-end" onclick="joinGroup('@group.Id')">Csatlakozás</button>
+                            </div>
+                        </div>
+                    }
+
+
+                </div>
+            </div>
+        </div>
+        row++;
+    }
+</div>

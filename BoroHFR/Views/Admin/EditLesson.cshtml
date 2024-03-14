@@ -1,0 +1,29 @@
+﻿@using BoroHFR.ViewModels.Admin
+@model EditLessonViewModel
+
+<form method="post" class="container">
+    <div class="form-group py-1">
+        @Html.LabelFor(x => x.Lesson.Label, "Név", new { @class = "form-label" })
+        @Html.TextBoxFor(x => x.Lesson.Label, null, new { @class = "form-control bg-dark text-light" })
+        <p class="text-danger">@Html.ValidationMessageFor(x => x.Lesson.Label)</p>
+    </div>
+    <div class="form-group py-1">
+        @Html.LabelFor(x => x.Lesson.FirstDate, "Első nap", new { @class = "form-label" })
+        <input class="form-control bg-dark text-light" type="date" id="@Html.IdFor(x => x.Lesson.FirstDate)" name="@Html.NameFor(x => x.Lesson.FirstDate)" value="@(Model.Lesson.FirstDate.ToString("yyyy-MM-dd") ?? DateTimeOffset.Now.ToString("yyyy-MM-dd"))"></input>
+    </div>
+    <div class="form-group py-1">
+        @Html.LabelFor(x => x.Lesson.LastDate, "Utolsó nap", new { @class = "form-label" })
+        <input class="form-control bg-dark text-light" type="date" id="@Html.IdFor(x => x.Lesson.LastDate)" name="@Html.NameFor(x => x.Lesson.LastDate)" value="@(Model.Lesson.LastDate?.ToString("yyyy-MM-dd") ?? DateTimeOffset.Now.ToString("yyyy-MM-dd"))"></input>
+    </div>
+    <div class="form-group py-1">
+        @Html.LabelFor(x => x.Lesson.StartTime, "Óra kezdete", new { @class = "form-label" })
+        <input class="form-control bg-dark text-light" type="time" id="@Html.IdFor(x => x.Lesson.StartTime)" name="@Html.NameFor(x => x.Lesson.StartTime)" value="@(Model.Lesson.StartTime.ToString("HH:mm") ?? DateTimeOffset.Now.ToString("HH:mm"))"></input>
+    </div>
+    <div class="form-group py-1">
+        @Html.LabelFor(x => x.Lesson.EndTime, "Óra vége", new { @class = "form-label" })
+        <input class="form-control bg-dark text-light" type="time" id="@Html.IdFor(x => x.Lesson.EndTime)" name="@Html.NameFor(x => x.Lesson.EndTime)" value="@(Model.Lesson.EndTime.ToString("HH:mm") ?? DateTimeOffset.Now.ToString("HH:mm"))"></input>
+    </div>
+    <button class="btn btn-primary" type="submit">Mentés</button>
+    <a class="btn btn-outline-danger" href="@Url.Action("Index")">Mégse</a>
+    <a class="btn btn-outline-danger" href="@Url.Action("DeleteLesson", new { lesid = Model.Lesson.Id })">Törlés</a>
+</form>

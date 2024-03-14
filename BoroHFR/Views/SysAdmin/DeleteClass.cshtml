@@ -1,0 +1,12 @@
+﻿@model BoroHFR.ViewModels.SysAdmin.DeleteClassViewModel
+
+@{
+    ViewData["Title"] = "Osztály törlés";
+}
+
+<h1>Biztosan törli a(z) @Model.Name osztályt?</h1>
+<h2>Ezzel töröl @Model.UserCount felhasználót, @Model.EventCount rögzített eseményt és @Model.ChatMessageCount szöveges üzenetet.</h2>
+<div class="d-flex flex-row justify-content-center">
+    <a class="mx-3 btn btn-danger" href="@Url.Action("ConfirmDeleteClass", new {id = Model.Id})">Törlés</a>
+    <a class="mx-3 btn btn-primary" href="@Url.Action("ClassInfo",new {id=Model.Id})">Mégsem</a>
+</div>

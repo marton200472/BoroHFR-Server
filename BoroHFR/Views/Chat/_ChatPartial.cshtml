@@ -1,0 +1,61 @@
+﻿@model Conversation
+@{
+    Guid userId = Guid.Parse(User.Claims.First(x=>x.Type == "Id").Value);
+}
+
+    <div class="card-header">
+        <h4 class="card-title"><strong>@Model.Name</strong></h4>
+        <div class="minimize-button px-0" type="button" onclick="chat.toggleMinimize('@Model.Id')"><i class="bi bi-caret-down-fill"></i></div>
+        <button type="button" class="btn-close btn-close-white" ></button>
+    </div>
+
+
+    <div class="ps-container ps-theme-default ps-active-y bg-black" style="overflow-y: scroll; ">
+        @{
+            DateOnly prevDate = DateOnly.MinValue;
+        }
+    @foreach (var section in Model.Messages.GroupBy(x => new { x.Sender, SendTime = new DateTimeOffset(DateOnly.FromDateTime(x.SendTime.Date),new TimeOnly(x.SendTime.Hour, x.SendTime.Minute,0), TimeSpan.Zero) }).OrderBy(x=> x.Key.SendTime))
+    {
+            var date = DateOnly.FromDateTime(section.Key.SendTime.LocalDateTime);
+            var time = TimeOnly.FromDateTime(section.Key.SendTime.LocalDateTime);
+            if (date != prevDate)
+            {
+                <div class="media media-meta-day">@date.ToShortDateString()</div>
+                prevDate = date;
+            }
+            <div class='media media-chat@(section.Key.Sender.Id.value == userId ? " media-chat-reverse" : "")'>
+                <div class="media-body">
+                    @foreach (var msg in section)
+                    {
+                        <p>@msg.Message
+                           @foreach (var attachment in msg.Attachments)
+                            {
+                                <br /><a href='@Url.Action("GetFile","File",new{id=attachment.Id})'>@attachment.DownloadName</a>
+                            } 
+                        </p>
+                    }
+                <p class="meta"><span class="chat-username" uid="@(section.Key.Sender.Id)">@(section.Key.Sender.Username)</span> - <time datetime='@(section.Key.SendTime.UtcDateTime.ToString("yyyy-MM-ddTHH:mm:00.000zzz"))'>@time.ToShortTimeString()</time></p>
+                </div>
+            </div>
+        }
+
+    </div>
+    <div class="ath_container tile-container ">
+        <table>
+            <!-- Table rows will be dynamically added here -->
+        </table>
+    </div>
+
+    <input type="file" class="d-none" multiple>
+
+    <form class="publisher bt-1 border-light bg-dark">
+        <input class="publisher-input bg-dark text-light" type="text" placeholder="Üzenet...">
+        <a class="publisher-btn upload-button">
+            <i class="bi bi-paperclip text-white file-browser"></i>
+        </a>
+            
+        <button type="submit" class="publisher-btn text-info" href="#" data-abc="true"><i class="bi bi-send text-white"></i></button>
+        <div class="attachment-guids">
+
+        </div>
+    </form>

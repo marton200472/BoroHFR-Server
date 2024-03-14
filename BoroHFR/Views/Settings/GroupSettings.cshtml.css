@@ -1,0 +1,8 @@
+#joinedgroupscontainer {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 20px;
+    background-color: #232323;
+
+}

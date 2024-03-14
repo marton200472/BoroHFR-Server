@@ -1,0 +1,56 @@
+﻿@model BoroHFR.ViewModels.Setup.DbDataViewModel
+
+<form method="post" class="coolform">
+    <h1>Adatbázis adatai</h1>
+    <p>MySQL vagy MariaDB adatbázis használható. A megadott felhasználónak módosító jogokkal is rendelkeznie kell.</p>
+
+    <div class="form-group py-1">
+        <label>Szerver:</label>
+        @Html.TextBoxFor(x => x.Server, null, new { @class = "form-control bg-dark text-light", @required = "" })
+        @Html.ValidationMessageFor(x => x.Server, "", new
+            {
+                @class = "text-danger"
+            })
+    </div>
+    <div class="form-group py-1">
+        <label>Port:</label>
+        @Html.TextBoxFor(x => x.Port, null, new { @class = "form-control bg-dark text-light", @required = "" })
+        @Html.ValidationMessageFor(x => x.Port, "", new
+            {
+                @class = "text-danger"
+            })
+    </div>
+    <div class="form-group py-1">
+        <label>Felhasználónév:</label>
+        @Html.TextBoxFor(x => x.User, null, new { @class = "form-control bg-dark text-light", @required = "" })
+        @Html.ValidationMessageFor(x => x.User, "", new
+            {
+                @class = "text-danger"
+            })
+    </div>
+    <div class="form-group py-1">
+        <label>Jelszó:</label>
+        @Html.PasswordFor(x => x.Password, new { @class = "form-control bg-dark text-light" })
+        @Html.ValidationMessageFor(x => x.Password, "", new
+            {
+                @class = "text-danger"
+            })
+    </div>
+    <div class="form-group py-1">
+        <label>Adatbázis:</label>
+        @Html.TextBoxFor(x => x.Database, null, new { @class = "form-control bg-dark text-light", @required = "" })
+        @Html.ValidationMessageFor(x => x.Database, "", new
+            {
+                @class = "text-danger"
+            })
+    </div>
+
+    @if (Model?.FailedToConnect ?? false)
+    {
+        <p class="text-danger">Nem sikerült csatlakozni a megadott MySQL/MariaDB szerverhez!</p>
+    }
+    
+    
+
+    <button class="btn btn-primary" type="submit">Mentés</button>
+</form>

@@ -1,0 +1,25 @@
+﻿@using BoroHFR.ViewModels.Admin
+@model CreateGroupViewModel
+
+<form method="post" class="container">
+    <div class="form-group py-1">
+        @Html.LabelFor(x => x.Name, "Név", new { @class = "form-label" })
+        @Html.TextBoxFor(x => x.Name, null, new { @class = "form-control bg-dark text-light" })
+    </div>
+    <div class="form-group py-1">
+        @Html.LabelFor(x => x.Teacher, "Oktató", new { @class = "form-label" })
+        @Html.TextBoxFor(x => x.Teacher, null, new { @class = "form-control bg-dark text-light" })
+    </div>
+    <div class="form-group py-1">
+        @Html.LabelFor(x => x.SelectedSubjectId, "Tárgy", new { @class = "form-label" })
+        <select class="form-control bg-dark text-light" id="@Html.IdFor(x => x.SelectedSubjectId)" name="@Html.NameFor(x => x.SelectedSubjectId)">
+            <option selected value="@null"></option>
+            @foreach (var subj in Model.Subjects)
+            {
+                <option value="@subj.Id.value">@subj.Name</option>
+            }
+        </select>
+    </div>
+    <button class="btn btn-primary" type="submit">Létrehozás</button>
+    <a class="btn btn-outline-danger" href="@Url.Action("Index")">Mégse</a>
+</form>

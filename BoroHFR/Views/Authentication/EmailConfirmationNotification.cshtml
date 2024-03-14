@@ -1,0 +1,9 @@
+@model BoroHFR.ViewModels.Authentication.EmailConfirmationNotificationViewModel
+
+@{
+    ViewData["Title"] = "E-mail cím megerősítés";
+}
+
+<h1>Kérlek erősítsd meg a megadott e-mail címet!</h1>
+<p>Küldtünk egy e-mailt a megadott címre (@Model.EmailAddress).</p>
+<a class="btn btn-primary" href='@Url.Action("Login","Authentication")'>Bejelentkezés</a>

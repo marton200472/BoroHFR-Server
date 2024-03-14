@@ -1,0 +1,74 @@
+@model BoroHFR.ViewModels.Settings.GroupSettingsViewModel
+@{
+    Layout = "_SettingsLayout";
+}
+
+<div id="joinedgroupscontainer" class="p-3 my-2">
+    <h2>Csoportjaid:</h2>
+    <div id="joinedgroupslist">
+        <partial name="_JoinedGroupsPartial"></partial>
+    </div>
+</div>
+
+
+<div class="p-3 my-2">
+    <h2>Csoportok keresése</h2>
+    <form id="searchform">
+        <div class="input-group">
+            <input placeholder="Tantárgy neve" class="form-control" id="subjsearch" type="text" />
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">Keresés</button>
+            </div>
+        </div>
+
+
+
+    </form>
+
+</div>
+
+
+<div id="resultscontainer" class="d-flex flex-column">
+    <p class="text-center">Még nincs itt semmi. Keress rá egy tantárgyra!</p>
+</div>
+
+@section Scripts{
+    <script>
+        $("#searchform").submit(x => search(x));
+
+        async function search(sm) {
+            sm.preventDefault();
+            loadSearchResults();
+        }
+
+        function refreshLists() {
+            loadSearchResults();
+            $("#joinedgroupslist").load('@Url.Action("JoinedGroups")');
+        }
+
+        async function loadSearchResults() {
+            $("#resultscontainer").html('<span class="spinner-grow spinner-grow-sm mx-auto my-3" role="status" aria-hidden="true"></span>');
+            var text = await postData('@Url.Action("SubjectSearch")', { query: $("#subjsearch").val() });
+            $("#resultscontainer").html(text);
+
+        }
+
+        async function joinGroup(id) {
+            if (!confirm("Biztosan be akarsz lépni ebbe a csoportba?")) {
+                return;
+            }
+            //await postData('@Url.Action("JoinGroup")', { id: id });
+            await fetch('/settings/joingroup/' + id);
+            await refreshLists();
+        }
+
+        async function leaveGroup(id) {
+            if (!confirm("Biztosan ki akarsz lépni ebből a csoportból?")) {
+                return;
+            }
+            //await postData('@Url.Action("LeaveGroup")', { id: id });
+            await fetch('/settings/leavegroup/' + id);
+            await refreshLists();
+        }
+    </script>
+}

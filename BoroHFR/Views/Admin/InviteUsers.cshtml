@@ -1,0 +1,31 @@
+﻿@model BoroHFR.ViewModels.Admin.InviteUsersViewModel
+
+<h1>Meghívó</h1>
+@if (Model?.Tokens is null)
+{
+    <form method="post">
+        <div class="form-group py-1">
+            @Html.LabelFor(x=>x.Quantity, "Darabszám/használatok száma:", new {  @class = "control-label"})
+            <input value="@(Model?.Quantity ?? 1)" class="form-control" type="number" min="1" max="100" step="1" required id="@Html.IdFor(x=>x.Quantity)" name="@Html.NameFor(x=>x.Quantity)"/>
+            <p class="text-danger">@Html.ValidationMessageFor(x=>x.Quantity)</p>
+        </div>
+        <div class="form-group py-1">
+            @Html.LabelFor(x => x.MultiUse, "Többszöri felhasználhatóság:", new { @class = "control-label" })
+            @Html.CheckBoxFor(x=>x.MultiUse)
+            <p class="text-danger">@Html.ValidationMessageFor(x => x.MultiUse)</p>
+        </div>
+        <div class="form-group py-1">
+            @Html.LabelFor(x => x.Validity, "Érvényesség:", new { @class = "control-label" })
+            <input value="@(Model?.Validity.UtcDateTime.ToString("yyyy-MM-ddTHH:mmZ") ?? DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mmZ"))" type="datetime-local" name="@Html.NameFor(x=>x.Validity)" id="@Html.IdFor(x=>x.Validity)"  required/>
+            <p class="text-danger">@Html.ValidationMessageFor(x => x.Validity)</p>
+        </div>
+
+        <button class="btn btn-primary">Meghívó(k) létrehozása</button>
+    </form>
+}
+else
+{
+    <textarea readonly>@string.Join("\n", Model.Tokens)</textarea>
+
+    <a class="btn btn-primary" href="@Url.Action("Index")">Kész</a>
+}

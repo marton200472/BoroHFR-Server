@@ -1,0 +1,45 @@
+﻿@model BoroHFR.ViewModels.Authentication.LoginViewModel
+
+@{
+    ViewData["Title"] = "Bejelentkezés";
+}
+
+@using (Html.BeginForm(FormMethod.Post, new
+{
+    @class = "px-5 coolform",
+}))
+{
+    <h1>Bejelentkezés</h1>
+    <div class="form-group py-1">
+    <label class="form-label">Felhasználónév:</label>
+    @Html.TextBoxFor(x => x.Username, null, new {@class="form-control bg-dark text-light", @required=""})
+    @Html.ValidationMessageFor(x => x.Username, "", new
+    {
+    @class = "text-danger"
+    })
+    @if (Model is not null && Model.BadUsername)
+        {
+            <span class="text-danger">Érvénytelen felhasználónév.</span>
+        }
+    </div>
+    <div class="form-group py-1">
+    <label class="form-label">Jelszó:</label>
+    @Html.PasswordFor(x => x.Password, new {@class="form-control bg-dark text-light", @required=""})
+    @Html.ValidationMessageFor(x => x.Password, "", new
+    {
+    @class = "text-danger"
+    })
+    @if (Model is not null && Model.BadPassword)
+        {
+            <span class="text-danger">Hibás jelszó.</span>
+            <br />
+            <span>Elfelejtetted a jelszavad? <a href='@Url.Action("ResetPassword")'>Jelszó visszaállítása</a></span>
+        }
+    </div>
+    <div class="form-check py-1">
+    @Html.CheckBoxFor(m=>m.RemainLoggedIn, new {@class="form-check-input", @id="remainloggedinbox"})
+    <label class="form-check-label" for="remainloggedinbox">Bejelentkezve maradok</label>
+</div>
+    <button class="btn btn-primary" type="submit">Bejelentkezés</button>
+    <p class="mt-1 text-center mb-0">Nincs fiókod? <a asp-action="Register" class="fw-bold">Regisztrálj!</a></p>
+}

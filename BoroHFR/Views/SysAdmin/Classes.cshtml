@@ -1,0 +1,25 @@
+﻿@model BoroHFR.ViewModels.SysAdmin.ClassesViewModel
+
+@{
+    ViewData["Title"] = "Osztályok";
+}
+
+<h1>Osztályok</h1>
+<a href='@Url.Action("CreateClass")' class="btn btn-primary">Új létrehozása</a>
+<table class="table table-dark">
+    <thead>
+        <tr>
+            <td>Név</td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model.Classes)
+        {
+            <tr>
+                <td>@c.Name</td>
+                <td><a class="btn btn-primary" href='@Url.Action("ClassInfo","SysAdmin",new {id=c.Id})'>Módosítás</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

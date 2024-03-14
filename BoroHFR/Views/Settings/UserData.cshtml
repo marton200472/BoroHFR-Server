@@ -1,0 +1,17 @@
+﻿@model BoroHFR.ViewModels.Settings.UserDataViewModel
+@{
+    Layout = "_SettingsLayout";
+}
+
+<h2>@Model.Username</h2>
+<p>
+    Információ:
+    <ul>
+        <li>Regisztráció dátuma: @Model.RegDate</li>
+        <li>Rang: @(Model.Role == UserRole.User ? "Felhasználó" : "Adminisztrátor")</li>
+        <li>Létrehozott események: @Model.EventsCreated</li>
+        <li>Elkészített feladatok: @Model.HomeworksDone</li>
+        <li>Események, melyeken részt vett: @Model.EventsAttended</li>
+        <li>Felhasznált tárhely: @Model.StorageUsed</li>
+    </ul>
+</p>
