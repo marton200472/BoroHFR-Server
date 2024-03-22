@@ -14,6 +14,7 @@ services:
     volumes:
       - storage:/app/storage
     environment:
+      - TZ=Europe/Budapest
       - ASPNETCORE_ENVIRONMENT=Docker
   db:
     image: yobasystems/alpine-mariadb
@@ -22,6 +23,7 @@ services:
     volumes:
       - db-data:/var/lib/mysql
     environment:
+      - TZ=Europe/Budapest
       - MYSQL_DATABASE=borohfr
       - MYSQL_RANDOM_ROOT_PASSWORD=True
       - MYSQL_USER=borohfr
