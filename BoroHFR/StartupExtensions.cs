@@ -72,13 +72,14 @@ namespace BoroHFR
 
             if (builder.Environment.IsDevelopment())
             {
-                builder.Services.AddEndpointsApiExplorer();
+                
+            }
+            
+            builder.Services.AddEndpointsApiExplorer();
                 builder.Services.AddSwaggerGen(x =>
                 {
                     x.DocumentFilter<BoroHFR.Helpers.SwaggerControllerFilter>();
                 });
-            }
-
 
             builder.Services.AddDbContext<BoroHfrDbContext>(c =>
             {
@@ -208,9 +209,11 @@ namespace BoroHFR
 
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
 
             app.UseStaticFiles();
