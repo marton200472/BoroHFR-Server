@@ -1,5 +1,6 @@
 using BoroHFR.Controllers.Helpers;
 using BoroHFR.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +8,7 @@ namespace BoroHFR.Controllers;
 
 
 [Route("api/tasks")]
+[Authorize("User")]
 public class ApiTasksController : ControllerBase
 {
     private readonly BoroHfrDbContext _dbContext;
