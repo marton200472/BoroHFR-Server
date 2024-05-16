@@ -143,14 +143,13 @@ namespace BoroHFR
                 })
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, x =>
                 {
-                    x.RequireHttpsMetadata = true;
+                    //x.RequireHttpsMetadata = true;
                     //x.SaveToken = true;
                     x.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
                         ValidateLifetime = true,
+                        ValidateIssuer = true,
                         ValidIssuer = builder.Configuration["Jwt:Issuer"],
                         ValidAudience = builder.Configuration["Jwt:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
