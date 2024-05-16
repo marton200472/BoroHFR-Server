@@ -110,8 +110,8 @@ namespace BoroHFR.Controllers
             model.Name = c.Name;
             model.Id = c.Id.value;
             model.UserCount = await _dbContext.Users.Where(x=>x.Class == c).CountAsync();
-            model.EventCount = await _dbContext.Events.Where(x=>x.Group!.Subject.Class == c).CountAsync();
-            model.ChatMessageCount = await _dbContext.ConversationMessages.Where(x => x.Conversation.Group.Subject.Class == c).CountAsync();
+            model.EventCount = await _dbContext.Events.Where(x=>x.Group!.Class == c).CountAsync();
+            model.ChatMessageCount = await _dbContext.ConversationMessages.Where(x => x.Conversation.Group.Class == c).CountAsync();
             return View(model);
         }
 
